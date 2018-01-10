@@ -1,18 +1,32 @@
 package pflb.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import pflb.entity.UserForLogin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
 public class UserController {
 
-    @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public UserForLogin login(@RequestBody UserForLogin user) {
+    int ResultCode;
 
-        return null;
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    public int postAuthUser(@RequestBody UserForLogin user) {
+        //sql запрос на аутентификацию
+        return ResultCode;
     }
+
+    @RequestMapping(value = "/user/session/{id}", method = RequestMethod.GET)
+    public int getUserInfo(@PathVariable String id){
+        //sql запрос на получение информации о пользователе
+        return ResultCode;
+    }
+
+    @RequestMapping(value = "/auth/session/{id}", method = RequestMethod.DELETE)
+    public int deleteSession(@PathVariable String id){
+        //sql запрос на удалене
+        return ResultCode;
+    }
+
+
 }
