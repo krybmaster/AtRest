@@ -7,6 +7,7 @@ public class User {
     private String PASSMD5;
     private int ROLE;
 
+
     public User(String ID, String LOGIN, String PASSMD5, int ROLE) {
         this.ID = ID;
         this.LOGIN = LOGIN;

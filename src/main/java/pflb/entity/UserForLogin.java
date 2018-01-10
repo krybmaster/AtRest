@@ -5,6 +5,7 @@ public class UserForLogin {
     private String LOGIN;
     private String PASSMD5;
 
+
     public UserForLogin(String LOGIN, String PASSMD5) {
         this.LOGIN = LOGIN;
         this.PASSMD5 = PASSMD5;

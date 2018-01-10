@@ -24,7 +24,7 @@ public class UserController {
 
     @RequestMapping(value = "/auth/session/{id}", method = RequestMethod.DELETE)
     public int deleteSession(@PathVariable String id){
-        //sql запрос на удалене
+        //sql запрос на удалене.
         return ResultCode;
     }
 

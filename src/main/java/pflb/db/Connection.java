@@ -18,7 +18,6 @@ public class Connection implements GetConnection{
         } catch (SQLException | ClassNotFoundException ex){
             ex.printStackTrace();
         }
-
         return con;
     }
 }
