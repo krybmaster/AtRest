@@ -3,6 +3,7 @@ package pflb.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pflb.entity.User;
 import pflb.entity.UserForLogin;
 
 import java.sql.*;
@@ -17,7 +18,7 @@ public class UserController {
     private String sql;
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public int postAuthUser(@RequestBody String login, String password) {
+    public int postAuthUser(@RequestBody UserForLogin user) {
 
         sql = "{CALL dbo.LogIn(?,?)}";
         Connection con = null;
@@ -28,13 +29,13 @@ public class UserController {
 
         try {
             pstmt = con.prepareCall(sql);
-            pstmt.setString(1, login);
-            pstmt.setString(2, password);
+            pstmt.setString(1, user.getLOGIN());
+            pstmt.setString(2, user.getPASSMD5());
             rs = pstmt.executeQuery();
             rs.next();
 
             sessionID = rs.getString("SESSION_ID");
-            if (sessionID != "") ResultCode = 1;
+            if (sessionID == "") ResultCode = 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
