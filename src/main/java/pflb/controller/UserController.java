@@ -34,8 +34,7 @@ public class UserController {
             rs.next();
 
             sessionID = rs.getString("SESSION_ID");
-            if (sessionID == "") System.out.println(200);
-            else System.out.println(404);
+            if (sessionID != "") ResultCode = 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
