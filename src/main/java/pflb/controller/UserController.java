@@ -24,7 +24,20 @@ public class UserController {
 
     @RequestMapping(value = "/auth/session/{id}", method = RequestMethod.DELETE)
     public int deleteSession(@PathVariable String id){
-        //sql запрос на удалене.
+        sql = "EXEC dbo.LogOut \'?\'";
+        Connection con = getConnection();
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {con.close();} catch (SQLException ignored) {}
+            try {pstmt.close();} catch (SQLException ignored) {}
+        }
+        
         return ResultCode;
     }
 
