@@ -66,6 +66,7 @@ public class UserController {
         try {
             pstmt = con.prepareCall(sql);
             pstmt.setString(1,sessionID);
+            rs = pstmt.executeQuery();
             while (rs.next()) {
                 role = rs.getInt("ROLE");
                 login = rs.getString("LOGIN");
@@ -95,8 +96,6 @@ public class UserController {
         Connection con = null;
         con = getConnection();
         PreparedStatement pstmt = null;
-
-        System.out.println(login);
 
         try {
             pstmt = con.prepareCall(sql);
