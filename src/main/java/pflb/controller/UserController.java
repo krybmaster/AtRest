@@ -50,21 +50,39 @@ public class UserController {
         return sessionIDJson;
     }
 
-    @RequestMapping(value = "/user/session/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/session/{sessionID}", method = RequestMethod.GET)
     public String getUserInfo(@PathVariable String sessionID) throws JsonParseException{
 
         sql = "{CALL dbo.GetUser(?)}";
+        String infoReq = "";
+        int role = 0;
+        String login = null;
+
         Connection con = null;
         con = getConnection();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String infoReq = "";
 
         try {
             pstmt = con.prepareCall(sql);
             pstmt.setString(1,sessionID);
+            while (rs.next()) {
+                role = rs.getInt("ROLE");
+                login = rs.getString("LOGIN");
+            }
+            if (role == 0 | login == null) {
+                return infoReq = "404";
+            } else {
+                UserInfo user = new UserInfo(login, role);
+                infoReq = GSON.toJson(user);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {rs.close();} catch (SQLException ignored) {}
+            try {pstmt.close();} catch (SQLException ignored) {}
+            try {con.close();} catch (SQLException ignored) {}
         }
 
         return infoReq;
