@@ -2,28 +2,31 @@ package pflb.entity;
 
 public class UserForLogin {
 
-    private String LOGIN;
-    private String PASSMD5;
+    private String login;
+    private String passMD5;
 
 
-    public UserForLogin(String LOGIN, String PASSMD5) {
-        this.LOGIN = LOGIN;
-        this.PASSMD5 = PASSMD5;
+    public UserForLogin(String login, String passMD5) {
+        this.login = login;
+        this.passMD5 = passMD5;
     }
 
-    public String getLOGIN() {
-        return LOGIN;
+
+
+    public String getLogin() {
+        return login;
     }
 
-    public void setLOGIN(String LOGIN) {
-        this.LOGIN = LOGIN;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public String getPASSMD5() {
-        return PASSMD5;
+    public String getPassMD5() {
+        return passMD5;
     }
 
-    public void setPASSMD5(String PASSMD5) {
-        this.PASSMD5 = PASSMD5;
+    public void setPassMD5(String passMD5) {
+        this.passMD5 = passMD5;
     }
+
 }
