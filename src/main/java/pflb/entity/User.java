@@ -2,48 +2,70 @@ package pflb.entity;
 
 public class User {
 
-    private String ID;
-    private String LOGIN;
-    private String PASSMD5;
-    private int ROLE;
+    private String login;
+    private String passMD5;
+    private int role;
+    private String sessionID;
+    private int ReturnCode;
+    private String ReqMessage;
 
-
-    public User(String ID, String LOGIN, String PASSMD5, int ROLE) {
-        this.ID = ID;
-        this.LOGIN = LOGIN;
-        this.PASSMD5 = PASSMD5;
-        this.ROLE = ROLE;
+    public User() {
     }
 
-    public String getID() {
-        return ID;
+    public User(String login, String passMD5, int role, String sessionID, int returnCode, String reqMessage) {
+        this.login = login;
+        this.passMD5 = passMD5;
+        this.role = role;
+        this.sessionID = sessionID;
+        ReturnCode = returnCode;
+        ReqMessage = reqMessage;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public String getLogin() {
+        return login;
     }
 
-    public String getLOGIN() {
-        return LOGIN;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public void setLOGIN(String LOGIN) {
-        this.LOGIN = LOGIN;
+    public String getPassMD5() {
+        return passMD5;
     }
 
-    public String getPASSMD5() {
-        return PASSMD5;
+    public void setPassMD5(String passMD5) {
+        this.passMD5 = passMD5;
     }
 
-    public void setPASSMD5(String PASSMD5) {
-        this.PASSMD5 = PASSMD5;
+    public int getRole() {
+        return role;
     }
 
-    public int getROLE() {
-        return ROLE;
+    public void setRole(int role) {
+        this.role = role;
     }
 
-    public void setROLE(int ROLE) {
-        this.ROLE = ROLE;
+    public String getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
+    }
+
+    public int getReturnCode() {
+        return ReturnCode;
+    }
+
+    public void setReturnCode(int returnCode) {
+        ReturnCode = returnCode;
+    }
+
+    public String getReqMessage() {
+        return ReqMessage;
+    }
+
+    public void setReqMessage(String reqMessage) {
+        ReqMessage = reqMessage;
     }
 }
