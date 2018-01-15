@@ -17,6 +17,10 @@ public class UserController extends CustomGsonBuilder {
     private String sql;
     private HttpStatus status;
 
+    private String Name;
+    private String LastName;
+    private String MiddleName;
+    private int Role;
     private int ReturnCode;
     private String SessionID;
     private String ReqMessage;
@@ -38,8 +42,10 @@ public class UserController extends CustomGsonBuilder {
             cstmt.registerOutParameter(3, java.sql.Types.CHAR);
             cstmt.registerOutParameter(4, java.sql.Types.INTEGER);
             cstmt.execute();
+
             SessionID = cstmt.getString(3);
             ReturnCode = cstmt.getInt(4);
+
             switch (ReturnCode) {
                 case 500:
                     status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -48,7 +54,7 @@ public class UserController extends CustomGsonBuilder {
                     user.setReqMessage(ReqMessage);
                     user.setReturnCode(ReturnCode);
 
-                    json = AuthReqJsonWithError().toJson(user);
+                    json = EmptyReqJson().toJson(user);
                     break;
                 case 404:
                     status = HttpStatus.NOT_FOUND;
@@ -57,7 +63,7 @@ public class UserController extends CustomGsonBuilder {
                     user.setReqMessage(ReqMessage);
                     user.setReturnCode(ReturnCode);
 
-                    json = AuthReqJsonWithError().toJson(user);
+                    json = EmptyReqJson().toJson(user);
                     break;
                 case 403:
                     status = HttpStatus.FORBIDDEN;
@@ -66,7 +72,7 @@ public class UserController extends CustomGsonBuilder {
                     user.setReqMessage(ReqMessage);
                     user.setReturnCode(ReturnCode);
 
-                    json = AuthReqJsonWithError().toJson(user);
+                    json = EmptyReqJson().toJson(user);
                     break;
                 case 201:
                     status = HttpStatus.CREATED;
@@ -82,83 +88,130 @@ public class UserController extends CustomGsonBuilder {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return ResponseEntity.status(status).body(json);
     }
 
     @RequestMapping(value = "/user/session/{sessionID}", method = RequestMethod.GET)
     public ResponseEntity getUserInfo(@PathVariable String sessionID) throws JsonParseException {
 
-        sql = "{CALL dbo.GetUser(?)}";
-        String infoReq = "";
-        int role = 0;
-        String login = "";
+        sql = "{CALL dbo.GetUser(?,?,?,?,?,?)}";
 
-        Connection con = getConnection();
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        try (Connection con = getConnection();
+             CallableStatement cstmt = con.prepareCall(sql)) {
 
-        try {
-            pstmt = con.prepareCall(sql);
-            pstmt.setString(1, sessionID);
-            rs = pstmt.executeQuery();
-            while (rs.next()) {
-                role = rs.getInt("ROLE");
-                login = rs.getString("LOGIN");
-            }
-            if (role == 0 | login == null) {
-//                return infoReq = "404";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            cstmt.setString(1, sessionID);
+            cstmt.registerOutParameter(2, Types.CHAR);
+            cstmt.registerOutParameter(3, Types.CHAR);
+            cstmt.registerOutParameter(4, Types.CHAR);
+            cstmt.registerOutParameter(5, Types.INTEGER);
+            cstmt.registerOutParameter(6, Types.INTEGER);
+            cstmt.execute();
+
+            Name = cstmt.getString(2);
+            LastName = cstmt.getString(3);;
+            MiddleName = cstmt.getString(4);
+            Role = cstmt.getInt(5);
+            ReturnCode = cstmt.getInt(6);
+
+            switch (ReturnCode) {
+                case 500:
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
+                    ReqMessage = "Server error";
+
+                    user.setReqMessage(ReqMessage);
+                    user.setReturnCode(ReturnCode);
+
+                    json = EmptyReqJson().toJson(user);
+                    break;
+                case 401:
+                    status = HttpStatus.UNAUTHORIZED;
+                    ReqMessage = "User unauthorized";
+
+                    user.setReqMessage(ReqMessage);
+                    user.setReturnCode(ReturnCode);
+
+                    json = EmptyReqJson().toJson(user);
+                    break;
+                case 418:
+                    status = HttpStatus.I_AM_A_TEAPOT;
+                    ReqMessage = "U TEAPOT LUL";
+
+                    user.setReqMessage(ReqMessage);
+                    user.setReturnCode(ReturnCode);
+
+                    json = EmptyReqJson().toJson(user);
+                    break;
+                case 200:
+                    status = HttpStatus.OK;
+                    ReqMessage = "OK";
+
+                    user.setName(Name);
+                    user.setLastName(LastName);
+                    user.setMiddleName(MiddleName);
+                    user.setRole(Role);
+                    user.setReqMessage(ReqMessage);
+                    user.setReturnCode(ReturnCode);
+
+                    json = InfoReqJson().toJson(user);
+                    break;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                rs.close();
-            } catch (SQLException ignored) {
-            }
-            try {
-                pstmt.close();
-            } catch (SQLException ignored) {
-            }
-            try {
-                con.close();
-            } catch (SQLException ignored) {
-            }
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(infoReq);
+        return ResponseEntity.status(status).body(json);
     }
 
     @RequestMapping(value = "/auth/session/{sessionID}", method = RequestMethod.DELETE)
     public ResponseEntity deleteSession(@PathVariable String sessionID) {
 
-        sql = "{CALL dbo.LogOut(?)}";
-        int resultCode = 200;
+        sql = "{CALL dbo.LogOut(?,?)}";
 
-        Connection con = getConnection();
-        PreparedStatement pstmt = null;
+        try (Connection con = getConnection();
+             CallableStatement cstmt = con.prepareCall(sql)){
 
-        try {
-            pstmt = con.prepareCall(sql);
-            pstmt.setString(1, sessionID);
-            resultCode = pstmt.executeUpdate();
+            cstmt.setString(1, sessionID);
+            cstmt.registerOutParameter(2, java.sql.Types.INTEGER);
+            cstmt.execute();
 
+            ReturnCode = cstmt.getInt(2);
+
+            switch (ReturnCode) {
+                case 500:
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
+                    ReqMessage = "Server error";
+
+                    user.setReqMessage(ReqMessage);
+                    user.setReturnCode(ReturnCode);
+
+                    json = EmptyReqJson().toJson(user);
+                    break;
+                case 401:
+                    status = HttpStatus.UNAUTHORIZED;
+                    ReqMessage = "User unauthorized";
+
+                    user.setReqMessage(ReqMessage);
+                    user.setReturnCode(ReturnCode);
+
+                    json = EmptyReqJson().toJson(user);
+                    break;
+                case 200:
+                    status = HttpStatus.OK;
+                    ReqMessage = "OK";
+
+                    user.setReqMessage(ReqMessage);
+                    user.setReturnCode(ReturnCode);
+
+                    json = EmptyReqJson().toJson(user);
+                    break;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                pstmt.close();
-            } catch (SQLException ignored) {
-            }
-            try {
-                con.close();
-            } catch (SQLException ignored) {
-            }
         }
 
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(status).body(json);
     }
 
 
