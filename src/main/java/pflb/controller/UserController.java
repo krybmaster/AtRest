@@ -1,31 +1,35 @@
 package pflb.controller;
 
 import com.google.gson.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pflb.db.*;
 import pflb.entity.Session;
 import pflb.entity.UserForLogin;
 import pflb.entity.UserInfo;
 
 import java.sql.*;
+import java.sql.Connection;
 
 import static pflb.db.Connection.getConnection;
 
 @RestController
 public class UserController {
 
-    final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private int ResultCode;
+
+    private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private String sql;
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public String postAuthUser(@RequestBody String JsonReq) throws JsonParseException {
+    public ResponseEntity postAuthUser(@RequestBody String JsonReq) throws JsonParseException {
 
         sql = "{CALL dbo.LogIn(?,?)}";
-        Connection con = null;
-        con = getConnection();
+        String sessionIDJson = "";
+
+        Connection con = getConnection();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String sessionIDJson = "";
 
         try {
 
@@ -37,6 +41,8 @@ public class UserController {
             rs = pstmt.executeQuery();
             rs.next();
 
+            //switch ()
+
             Session sessionReq = new Session(rs.getString("SESSION_ID"));
             sessionIDJson = GSON.toJson(sessionReq);
 
@@ -47,19 +53,18 @@ public class UserController {
             try {pstmt.close();} catch (SQLException ignored) {}
             try {con.close();} catch (SQLException ignored) {}
         }
-        return sessionIDJson;
+        return ResponseEntity.status(HttpStatus.CREATED).body(sessionIDJson);
     }
 
     @RequestMapping(value = "/user/session/{sessionID}", method = RequestMethod.GET)
-    public String getUserInfo(@PathVariable String sessionID) throws JsonParseException{
+    public ResponseEntity getUserInfo(@PathVariable String sessionID) throws JsonParseException{
 
         sql = "{CALL dbo.GetUser(?)}";
         String infoReq = "";
         int role = 0;
-        String login = null;
+        String login = "";
 
-        Connection con = null;
-        con = getConnection();
+        Connection con = getConnection();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
@@ -72,7 +77,8 @@ public class UserController {
                 login = rs.getString("LOGIN");
             }
             if (role == 0 | login == null) {
-                return infoReq = "404";
+//                return infoReq = "404";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             } else {
                 UserInfo user = new UserInfo(login, role);
                 infoReq = GSON.toJson(user);
@@ -86,30 +92,33 @@ public class UserController {
             try {con.close();} catch (SQLException ignored) {}
         }
 
-        return infoReq;
+        return ResponseEntity.status(HttpStatus.CREATED).body(infoReq);
     }
 
-    @RequestMapping(value = "/auth/session/{login}", method = RequestMethod.DELETE)
-    public int deleteSession(@PathVariable String login){
+    @RequestMapping(value = "/auth/session/{sessionID}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteSession(@PathVariable String sessionID){
 
         sql = "{CALL dbo.LogOut(?)}";
-        Connection con = null;
-        con = getConnection();
+        int resultCode = 200;
+
+        Connection con = getConnection();
         PreparedStatement pstmt = null;
 
         try {
             pstmt = con.prepareCall(sql);
-            pstmt.setString(1, login);
-            pstmt.executeUpdate();
+            pstmt.setString(1, sessionID);
+            resultCode = pstmt.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
-            ResultCode = 1;
         } finally {
             try {pstmt.close();} catch (SQLException ignored) {}
             try {con.close();} catch (SQLException ignored) {}
         }
 
-        return ResultCode;
+
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 
