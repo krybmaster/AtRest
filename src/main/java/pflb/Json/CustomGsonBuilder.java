@@ -4,7 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import pflb.Json.Deserializer.AuthErrorDeserializer;
 import pflb.Json.Serializers.AuthSerializer;
-import pflb.Json.Serializers.AuthSerializerWithError;
+import pflb.Json.Serializers.EmptyReqSerializer;
+import pflb.Json.Serializers.InfoSerializer;
 import pflb.entity.User;
 
 public class CustomGsonBuilder {
@@ -17,10 +18,10 @@ public class CustomGsonBuilder {
                 .create();
     }
 
-    protected Gson AuthReqJsonWithError() {
+    protected Gson EmptyReqJson() {
         return new GsonBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(User.class, new AuthSerializerWithError())
+                .registerTypeAdapter(User.class, new EmptyReqSerializer())
                 .create();
     }
 
@@ -28,6 +29,13 @@ public class CustomGsonBuilder {
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(User.class, new AuthSerializer())
+                .create();
+    }
+
+    protected Gson InfoReqJson() {
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(User.class, new InfoSerializer())
                 .create();
     }
 }
