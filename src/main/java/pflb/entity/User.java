@@ -2,55 +2,87 @@ package pflb.entity;
 
 public class User {
 
-    private String login;
-    private String passMD5;
-    private int role;
-    private String sessionID;
+    private String Login;
+    private String PassMD5;
+    private String Name;
+    private String LastName;
+    private String MiddleName;
+    private int Role;
+    private String SessionID;
     private int ReturnCode;
     private String ReqMessage;
 
     public User() {
     }
 
-    public User(String login, String passMD5, int role, String sessionID, int returnCode, String reqMessage) {
-        this.login = login;
-        this.passMD5 = passMD5;
-        this.role = role;
-        this.sessionID = sessionID;
+    public User(String login, String passMD5, String name, String lastName,
+                String middleName, int role, String sessionID, int returnCode,
+                String reqMessage) {
+        Login = login;
+        PassMD5 = passMD5;
+        Name = name;
+        LastName = lastName;
+        MiddleName = middleName;
+        Role = role;
+        SessionID = sessionID;
         ReturnCode = returnCode;
         ReqMessage = reqMessage;
     }
 
     public String getLogin() {
-        return login;
+        return Login;
     }
 
     public void setLogin(String login) {
-        this.login = login;
+        Login = login;
     }
 
     public String getPassMD5() {
-        return passMD5;
+        return PassMD5;
     }
 
     public void setPassMD5(String passMD5) {
-        this.passMD5 = passMD5;
+        PassMD5 = passMD5;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    public void setLastName(String lastName) {
+        LastName = lastName;
+    }
+
+    public String getMiddleName() {
+        return MiddleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        MiddleName = middleName;
     }
 
     public int getRole() {
-        return role;
+        return Role;
     }
 
     public void setRole(int role) {
-        this.role = role;
+        Role = role;
     }
 
     public String getSessionID() {
-        return sessionID;
+        return SessionID;
     }
 
     public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
+        SessionID = sessionID;
     }
 
     public int getReturnCode() {
