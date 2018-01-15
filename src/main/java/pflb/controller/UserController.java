@@ -1,10 +1,9 @@
 package pflb.controller;
 
-import com.google.gson.*;
+import com.google.gson.JsonParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import pflb.Json.CustomGsonBuilder;
 import pflb.entity.User;
 
@@ -28,24 +27,19 @@ public class UserController extends CustomGsonBuilder {
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity postAuthUser(@RequestBody String JsonReq) throws JsonParseException {
 
-        sql = "{CALL dbo.LogIn(?,?)}";
+        sql = "{CALL dbo.LogIn(?,?,?,?)}";
 
-        Connection con = getConnection();
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
+        try (Connection con = getConnection();
+             CallableStatement cstmt = con.prepareCall(sql)) {
             user = AuthErrorFromJson().fromJson(JsonReq, User.class);
 
-            pstmt = con.prepareCall(sql);
-            pstmt.setString(1, user.getLogin());
-            pstmt.setString(2, user.getPassMD5());
-            rs = pstmt.executeQuery();
-            while (rs.next()) {
-                ReturnCode = rs.getInt("CODE");
-                SessionID = rs.getString("SESSION");
-            }
-
+            cstmt.setString(1, user.getLogin());
+            cstmt.setString(2, user.getPassMD5());
+            cstmt.registerOutParameter(3, java.sql.Types.CHAR);
+            cstmt.registerOutParameter(4, java.sql.Types.INTEGER);
+            cstmt.execute();
+            SessionID = cstmt.getString(3);
+            ReturnCode = cstmt.getInt(4);
             switch (ReturnCode) {
                 case 500:
                     status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -87,16 +81,12 @@ public class UserController extends CustomGsonBuilder {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {rs.close();} catch (SQLException ignored) {}
-            try {pstmt.close();} catch (SQLException ignored) {}
-            try {con.close();} catch (SQLException ignored) {}
         }
         return ResponseEntity.status(status).body(json);
     }
 
     @RequestMapping(value = "/user/session/{sessionID}", method = RequestMethod.GET)
-    public ResponseEntity getUserInfo(@PathVariable String sessionID) throws JsonParseException{
+    public ResponseEntity getUserInfo(@PathVariable String sessionID) throws JsonParseException {
 
         sql = "{CALL dbo.GetUser(?)}";
         String infoReq = "";
@@ -109,7 +99,7 @@ public class UserController extends CustomGsonBuilder {
 
         try {
             pstmt = con.prepareCall(sql);
-            pstmt.setString(1,sessionID);
+            pstmt.setString(1, sessionID);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 role = rs.getInt("ROLE");
@@ -123,16 +113,25 @@ public class UserController extends CustomGsonBuilder {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {rs.close();} catch (SQLException ignored) {}
-            try {pstmt.close();} catch (SQLException ignored) {}
-            try {con.close();} catch (SQLException ignored) {}
+            try {
+                rs.close();
+            } catch (SQLException ignored) {
+            }
+            try {
+                pstmt.close();
+            } catch (SQLException ignored) {
+            }
+            try {
+                con.close();
+            } catch (SQLException ignored) {
+            }
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(infoReq);
     }
 
     @RequestMapping(value = "/auth/session/{sessionID}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteSession(@PathVariable String sessionID){
+    public ResponseEntity deleteSession(@PathVariable String sessionID) {
 
         sql = "{CALL dbo.LogOut(?)}";
         int resultCode = 200;
@@ -148,10 +147,15 @@ public class UserController extends CustomGsonBuilder {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {pstmt.close();} catch (SQLException ignored) {}
-            try {con.close();} catch (SQLException ignored) {}
+            try {
+                pstmt.close();
+            } catch (SQLException ignored) {
+            }
+            try {
+                con.close();
+            } catch (SQLException ignored) {
+            }
         }
-
 
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

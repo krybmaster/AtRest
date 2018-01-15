@@ -9,7 +9,7 @@ import pflb.entity.User;
 
 import java.lang.reflect.Type;
 
-public class AuthSerializerWithError implements JsonSerializer<User>{
+public class AuthSerializerWithError implements JsonSerializer<User> {
 
     @Override
     public JsonElement serialize(User src, Type typeOfStc, JsonSerializationContext context) {

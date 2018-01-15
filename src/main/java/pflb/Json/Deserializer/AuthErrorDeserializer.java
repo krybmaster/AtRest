@@ -5,7 +5,7 @@ import pflb.entity.User;
 
 import java.lang.reflect.Type;
 
-public class AuthErrorDeserializer implements JsonDeserializer<User>{
+public class AuthErrorDeserializer implements JsonDeserializer<User> {
 
     @Override
     public User deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)

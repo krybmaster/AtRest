@@ -1,6 +1,7 @@
 package pflb.Json;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import pflb.Json.Deserializer.AuthErrorDeserializer;
 import pflb.Json.Serializers.AuthSerializer;
 import pflb.Json.Serializers.AuthSerializerWithError;
@@ -23,7 +24,7 @@ public class CustomGsonBuilder {
                 .create();
     }
 
-    protected Gson AuthReqJson(){
+    protected Gson AuthReqJson() {
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(User.class, new AuthSerializer())
