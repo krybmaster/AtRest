@@ -31,6 +31,8 @@ public class UserController extends CustomGsonBuilder {
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity postAuthUser(@RequestBody String JsonReq) throws JsonParseException {
 
+        ReqMessage = "";
+        ReturnCode = 0;
         sql = "{CALL dbo.LogIn(?,?,?,?)}";
 
         try (Connection con = getConnection();
@@ -95,21 +97,23 @@ public class UserController extends CustomGsonBuilder {
     @RequestMapping(value = "/user/session/{sessionID}", method = RequestMethod.GET)
     public ResponseEntity getUserInfo(@PathVariable String sessionID) throws JsonParseException {
 
-        sql = "{CALL dbo.GetUser(?,?,?,?,?,?)}";
+        ReqMessage = "";
+        ReturnCode = 0;
+        sql = "{CALL dbo.GetInfo(?,?,?,?,?,?)}";
 
         try (Connection con = getConnection();
              CallableStatement cstmt = con.prepareCall(sql)) {
 
             cstmt.setString(1, sessionID);
-            cstmt.registerOutParameter(2, Types.CHAR);
-            cstmt.registerOutParameter(3, Types.CHAR);
-            cstmt.registerOutParameter(4, Types.CHAR);
-            cstmt.registerOutParameter(5, Types.INTEGER);
-            cstmt.registerOutParameter(6, Types.INTEGER);
+            cstmt.registerOutParameter(2, java.sql.Types.NVARCHAR);
+            cstmt.registerOutParameter(3, Types.NVARCHAR);
+            cstmt.registerOutParameter(4, java.sql.Types.NVARCHAR);
+            cstmt.registerOutParameter(5, java.sql.Types.INTEGER);
+            cstmt.registerOutParameter(6, java.sql.Types.INTEGER);
             cstmt.execute();
 
             Name = cstmt.getString(2);
-            LastName = cstmt.getString(3);;
+            LastName = cstmt.getString(3);
             MiddleName = cstmt.getString(4);
             Role = cstmt.getInt(5);
             ReturnCode = cstmt.getInt(6);
@@ -156,7 +160,6 @@ public class UserController extends CustomGsonBuilder {
                     json = InfoReqJson().toJson(user);
                     break;
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -167,6 +170,8 @@ public class UserController extends CustomGsonBuilder {
     @RequestMapping(value = "/auth/session/{sessionID}", method = RequestMethod.DELETE)
     public ResponseEntity deleteSession(@PathVariable String sessionID) {
 
+        ReqMessage = "";
+        ReturnCode = 0;
         sql = "{CALL dbo.LogOut(?,?)}";
 
         try (Connection con = getConnection();
