@@ -19,7 +19,7 @@
   </build>
   <packaging>jar</packaging>
 
-  <name>api_V0.1</name>
+  <name>api_V01</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -54,6 +54,11 @@
       <groupId>com.microsoft</groupId>
       <artifactId>sqljdbc4</artifactId>
       <version>3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.1.4</version>
     </dependency>
   </dependencies>
 
