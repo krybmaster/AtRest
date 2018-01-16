@@ -13,7 +13,7 @@ public class Connection implements GetConnection {
 
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            con = DriverManager.getConnection(conUrl, user, pass);
+            con = DriverManager.getConnection(MsSqlConUrl, MsSqlUser, MsSqlPass);
             stmt = con.createStatement();
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
