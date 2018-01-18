@@ -1,17 +1,21 @@
-package pflb.Json;
+package pflb.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import pflb.Json.Deserializer.AuthErrorDeserializer;
-import pflb.Json.Serializers.AuthSerializer;
-import pflb.Json.Serializers.EmptyReqSerializer;
-import pflb.Json.Serializers.InfoSerializer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import pflb.json.Deserializer.AuthErrorDeserializer;
+import pflb.json.Serializers.AuthSerializer;
+import pflb.json.Serializers.EmptyReqSerializer;
+import pflb.json.Serializers.InfoSerializer;
 import pflb.entity.User;
 
 public class CustomGsonBuilder {
 
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     protected Gson AuthErrorFromJson() {
+        logger.info("User data deserialized");
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(User.class, new AuthErrorDeserializer())
@@ -19,6 +23,7 @@ public class CustomGsonBuilder {
     }
 
     protected Gson EmptyReqJson() {
+        logger.info("Error request from server serialized");
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(User.class, new EmptyReqSerializer())
@@ -26,6 +31,7 @@ public class CustomGsonBuilder {
     }
 
     protected Gson AuthReqJson() {
+        logger.info("Login request from server serialized");
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(User.class, new AuthSerializer())
@@ -33,6 +39,7 @@ public class CustomGsonBuilder {
     }
 
     protected Gson InfoReqJson() {
+        logger.info("User info in request from server serialized");
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(User.class, new InfoSerializer())

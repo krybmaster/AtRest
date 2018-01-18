@@ -1,4 +1,5 @@
-package pflb.Json.Serializers;
+package pflb.json.Serializers;
+
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,16 +9,14 @@ import pflb.entity.User;
 
 import java.lang.reflect.Type;
 
-public class InfoSerializer implements JsonSerializer<User>{
+public class AuthSerializer implements JsonSerializer<User> {
+
     @Override
-    public JsonElement serialize(User src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(User src, Type typeOfStc, JsonSerializationContext context) {
 
         JsonObject result = new JsonObject();
 
-        result.addProperty("name", src.getName());
-        result.addProperty("last name", src.getLastName());
-        result.addProperty("middle name", src.getMiddleName());
-        result.addProperty("role", src.getRole());
+        result.addProperty("sessionID", src.getSessionID());
         result.addProperty("message", src.getReqMessage());
         result.addProperty("code", src.getReturnCode());
 

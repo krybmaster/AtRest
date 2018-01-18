@@ -6,7 +6,7 @@ public interface GetConnection {
     String MsSqlUser = "y.ryabov";
     String MsSqlPass = "82654";
 
-    String PgSqlConUrl = "jdbc:postgresql://localhost/test";
+    String PgSqlConUrl = "jdbc:postgresql://192.168.81.16/PFLB";
     String PgSqlUser = "y.ryabov";
-    String PgSqlPass = "";
+    String PgSqlPass = "82654";
 }

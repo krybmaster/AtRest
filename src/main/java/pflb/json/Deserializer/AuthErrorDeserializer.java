@@ -1,4 +1,4 @@
-package pflb.Json.Deserializer;
+package pflb.json.Deserializer;
 
 import com.google.gson.*;
 import pflb.entity.User;
