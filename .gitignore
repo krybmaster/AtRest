@@ -50,6 +50,11 @@ cmake-build-debug/
 
 ## Plugin-specific files:
 
+target
+.env
+.idea/
+*.iml
+
 # IntelliJ
 /out/
 
