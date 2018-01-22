@@ -3,6 +3,7 @@ package pflb.controller;
 import com.google.gson.JsonParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,8 @@ public class UserController extends CustomGsonBuilder {
 
     private String sql;
     private HttpStatus status;
+    private String ConType = "Content-Type";
+    private String ConValue = "application/json; charset=UTF-8";
 
     private String Name;
     private String LastName;
@@ -100,7 +103,8 @@ public class UserController extends CustomGsonBuilder {
             e.printStackTrace();
         }
 
-        return ResponseEntity.status(status).body(json);
+
+        return ResponseEntity.status(status).header(ConType, ConValue).body(json);
     }
 
     @RequestMapping(value = "/user/session/{sessionID}", method = RequestMethod.GET)
@@ -178,7 +182,7 @@ public class UserController extends CustomGsonBuilder {
             e.printStackTrace();
         }
 
-        return ResponseEntity.status(status).body(json);
+        return ResponseEntity.status(status).header(ConType, ConValue).body(json);
     }
 
     @RequestMapping(value = "/auth/session/{sessionID}", method = RequestMethod.DELETE)
@@ -234,7 +238,7 @@ public class UserController extends CustomGsonBuilder {
             e.printStackTrace();
         }
 
-        return ResponseEntity.status(status).body(json);
+        return ResponseEntity.status(status).header(ConType, ConValue).body(json);
     }
 
 
