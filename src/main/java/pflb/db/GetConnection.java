@@ -2,8 +2,11 @@ package pflb.db;
 
 public interface GetConnection {
 
-    String conUrl ="jdbc:sqlserver://localhost:1433/databaseName=pflb;";
-    String user = "yaroslav";
-    String pass = "82654";
+    String MsSqlConUrl = "jdbc:sqlserver://192.168.81.16\\sqlexpress;databaseName=pflb;";
+    String MsSqlUser = "y.ryabov";
+    String MsSqlPass = "82654";
 
+    String PgSqlConUrl = "jdbc:postgresql://192.168.81.16/PFLB";
+    String PgSqlUser = "y.ryabov";
+    String PgSqlPass = "82654";
 }
