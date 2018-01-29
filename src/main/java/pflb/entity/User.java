@@ -9,15 +9,16 @@ public class User {
     private String MiddleName;
     private int Role;
     private String SessionID;
+    private String ImgURL;
+    private int CurseID;
+
     private int ReturnCode;
     private String ReqMessage;
 
     public User() {
     }
 
-    public User(String login, String passMD5, String name, String lastName,
-                String middleName, int role, String sessionID, int returnCode,
-                String reqMessage) {
+    public User(String login, String passMD5, String name, String lastName, String middleName, int role, String sessionID, String imgURL, int curseID, int returnCode, String reqMessage) {
         Login = login;
         PassMD5 = passMD5;
         Name = name;
@@ -25,6 +26,8 @@ public class User {
         MiddleName = middleName;
         Role = role;
         SessionID = sessionID;
+        ImgURL = imgURL;
+        CurseID = curseID;
         ReturnCode = returnCode;
         ReqMessage = reqMessage;
     }
@@ -83,6 +86,22 @@ public class User {
 
     public void setSessionID(String sessionID) {
         SessionID = sessionID;
+    }
+
+    public String getImgURL() {
+        return ImgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        ImgURL = imgURL;
+    }
+
+    public int getCurseID() {
+        return CurseID;
+    }
+
+    public void setCurseID(int curseID) {
+        CurseID = curseID;
     }
 
     public int getReturnCode() {
