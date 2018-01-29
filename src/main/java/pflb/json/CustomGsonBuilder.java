@@ -5,9 +5,7 @@ import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pflb.json.Deserializer.AuthErrorDeserializer;
-import pflb.json.Serializers.AuthSerializer;
-import pflb.json.Serializers.EmptyReqSerializer;
-import pflb.json.Serializers.InfoSerializer;
+import pflb.json.Serializers.*;
 import pflb.entity.User;
 
 public class CustomGsonBuilder {
@@ -22,14 +20,6 @@ public class CustomGsonBuilder {
                 .create();
     }
 
-    protected Gson EmptyReqJson() {
-        logger.info("Error request from server serialized");
-        return new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(User.class, new EmptyReqSerializer())
-                .create();
-    }
-
     protected Gson AuthReqJson() {
         logger.info("Login request from server serialized");
         return new GsonBuilder()
@@ -38,11 +28,35 @@ public class CustomGsonBuilder {
                 .create();
     }
 
+    protected  Gson CourseReqJson() {
+        logger.info("Course request from server serialized");
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(User.class, new CourseSerializer())
+                .create();
+    }
+
+    protected Gson EmptyReqJson() {
+        logger.info("Error request from server serialized");
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(User.class, new EmptyReqSerializer())
+                .create();
+    }
+
     protected Gson InfoReqJson() {
         logger.info("User info in request from server serialized");
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(User.class, new InfoSerializer())
+                .create();
+    }
+
+    protected Gson LessonReqJson() {
+        logger.info("Lesson request from server serialized");
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(User.class, new LessonSerializer())
                 .create();
     }
 }
