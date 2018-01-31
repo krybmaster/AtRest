@@ -17,8 +17,10 @@ public class Connection implements GetConnection {
         java.sql.Connection con = null;
 
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            con = DriverManager.getConnection(MsSqlConUrl, MsSqlUser, MsSqlPass);
+            //Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            //con = DriverManager.getConnection(MsSqlConUrl, MsSqlUser, MsSqlPass);
+            Class.forName("org.postgresql.Driver");
+            con = DriverManager.getConnection(PgSqlConUrl,PgSqlUser,PgSqlPass);
             logger.info("Connection to db successful");
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
