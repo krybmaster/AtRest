@@ -6,10 +6,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pflb.entity.Course;
-import pflb.entity.Lesson;
+import pflb.entity.user.Course;
+import pflb.entity.user.Lesson;
 import pflb.json.CustomGsonBuilder;
-import pflb.entity.User;
+import pflb.entity.user.User;
 
 import java.sql.*;
 import java.util.UUID;
@@ -272,7 +272,7 @@ public class UserController extends CustomGsonBuilder {
                     course.setReqMessage(ReqMessage);
                     course.setReturnCode(ReturnCode);
 
-                    json = CourseReqJson().toJson(course);
+                    json = userCourseReqJson().toJson(course);
                     logger.info("Get course " + ReqMessage + " request code: " + ReturnCode + "\n");
                     break;
             }
@@ -345,7 +345,7 @@ public class UserController extends CustomGsonBuilder {
                     lesson.setReqMessage(ReqMessage);
                     lesson.setReturnCode(ReturnCode);
 
-                    json = CourseReqJson().toJson(lesson);
+                    json = userCourseReqJson().toJson(lesson);
                     logger.info("Get course " + ReqMessage + " request code: " + ReturnCode + "\n");
                     break;
             }
