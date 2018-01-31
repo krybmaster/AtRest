@@ -1,7 +1,7 @@
 package pflb.json.Deserializer;
 
 import com.google.gson.*;
-import pflb.entity.User;
+import pflb.entity.user.User;
 
 import java.lang.reflect.Type;
 
