@@ -1,23 +1,23 @@
-package pflb.entity;
+package pflb.entity.user;
 
-public class Lesson {
+public class Course {
 
     private int     ID;
     private String  Name;
-    private String  LessonTask;
-    private String  HomeTask;
+    private String  StartDate;
+    private String  EndDate;
 
     private int ReturnCode;
     private String ReqMessage;
 
-    public Lesson() {
+    public Course() {
     }
 
-    public Lesson(int ID, String name, String lessonTask, String homeTask, int returnCode, String reqMessage) {
+    public Course(int ID, String name, String startDate, String endDate, int returnCode, String reqMessage) {
         this.ID = ID;
         Name = name;
-        LessonTask = lessonTask;
-        HomeTask = homeTask;
+        StartDate = startDate;
+        EndDate = endDate;
         ReturnCode = returnCode;
         ReqMessage = reqMessage;
     }
@@ -38,20 +38,20 @@ public class Lesson {
         Name = name;
     }
 
-    public String getLessonTask() {
-        return LessonTask;
+    public String getStartDate() {
+        return StartDate;
     }
 
-    public void setLessonTask(String lessonTask) {
-        LessonTask = lessonTask;
+    public void setStartDate(String startDate) {
+        StartDate = startDate;
     }
 
-    public String getHomeTask() {
-        return HomeTask;
+    public String getEndDate() {
+        return EndDate;
     }
 
-    public void setHomeTask(String homeTask) {
-        HomeTask = homeTask;
+    public void setEndDate(String endDate) {
+        EndDate = endDate;
     }
 
     public int getReturnCode() {

@@ -1,4 +1,4 @@
-package pflb.entity;
+package pflb.entity.user;
 
 public class User {
 
