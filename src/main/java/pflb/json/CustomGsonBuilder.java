@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pflb.json.Deserializer.AuthErrorDeserializer;
-import pflb.json.Serializers.*;
-import pflb.entity.User;
+import pflb.entity.user.User;
+import pflb.json.Serializers.user.*;
 
 public class CustomGsonBuilder {
 
@@ -28,14 +28,14 @@ public class CustomGsonBuilder {
                 .create();
     }
 
-    protected  Gson CourseReqJson() {
-        logger.info("Course request from server serialized");
+    protected  Gson userCourseReqJson() {
+        logger.info("masterCourse request from server serialized");
         return new GsonBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(User.class, new CourseSerializer())
+                .registerTypeAdapter(User.class, new userCourseSerializer())
                 .create();
     }
-
+    
     protected Gson EmptyReqJson() {
         logger.info("Error request from server serialized");
         return new GsonBuilder()
@@ -56,7 +56,7 @@ public class CustomGsonBuilder {
         logger.info("Lesson request from server serialized");
         return new GsonBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(User.class, new LessonSerializer())
+                .registerTypeAdapter(User.class, new userLessonSerializer())
                 .create();
     }
 }
