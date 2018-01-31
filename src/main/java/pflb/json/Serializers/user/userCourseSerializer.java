@@ -1,15 +1,14 @@
-package pflb.json.Serializers;
+package pflb.json.Serializers.user;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import pflb.entity.Course;
+import pflb.entity.user.Course;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 
-public class CourseSerializer implements JsonSerializer<Course> {
+public class userCourseSerializer implements JsonSerializer<Course> {
     @Override
     public JsonElement serialize(Course src, Type typeOfSrc, JsonSerializationContext Context) {
 
