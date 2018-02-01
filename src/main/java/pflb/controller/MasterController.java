@@ -11,16 +11,22 @@ import pflb.json.CustomGsonBuilder;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static pflb.db.Connection.getConnection;
 
 @RestController
 public class MasterController extends CustomGsonBuilder {
 
-    private String json;
     private String sql;
+
     private String ConType = "Content-Type";
     private String ConValue = "application/json; charset=UTF-8";
+    private HttpStatus status;
+
+    private int ReturnCode;
+    private String ReqMessage;
+    private String json;
 
     private masterCourse course = new masterCourse();
     private masterLessonWithoutTasks lesson = new masterLessonWithoutTasks();
@@ -146,10 +152,89 @@ public class MasterController extends CustomGsonBuilder {
         return ResponseEntity.status(HttpStatus.OK).header(ConType, ConValue).body(json);
     }
 
-    @RequestMapping(value = "/empty", method = RequestMethod.GET)
+    @RequestMapping(value = "/lessons/{sID}/{cID}/{lName}", method = RequestMethod.PUT)
     @CrossOrigin
-    public ResponseEntity getEmpty() {
-        return  ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity addLesson(@PathVariable UUID sID,
+                                    @PathVariable int cID,
+                                    @PathVariable String lName) throws JsonParseException {
+        sql = "{call add_lesson(?,?,?,?)}";
+
+        try (Connection con = getConnection();
+             CallableStatement cstmt = con.prepareCall(sql)) {
+
+            cstmt.setObject(1, sID,Types.OTHER);
+            cstmt.setInt(2,cID);
+            cstmt.setString(3,lName);
+            cstmt.registerOutParameter(4, Types.SMALLINT);
+            cstmt.execute();
+
+            ReturnCode = cstmt.getShort(4);
+
+            switch (ReturnCode) {
+                case 500:
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+                    json = new Gson().toJson(ReturnCode);
+                    break;
+                case 401:
+                    status = HttpStatus.UNAUTHORIZED;
+
+                    json = new Gson().toJson(ReturnCode);
+                    break;
+                case 200:
+                    status = HttpStatus.OK;
+
+                    json = new Gson().toJson(ReturnCode);
+                    break;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).header(ConType, ConValue).body(json);
     }
 
+    @RequestMapping(value = "/theme/{sID}/{lID}/{tName}", method = RequestMethod.PUT)
+    @CrossOrigin
+    public ResponseEntity addTheme(@PathVariable UUID sID,
+                                    @PathVariable int lID,
+                                    @PathVariable String tName) throws JsonParseException {
+        sql = "{call add_theme(?,?,?,?)}";
+
+        try (Connection con = getConnection();
+             CallableStatement cstmt = con.prepareCall(sql)) {
+
+            cstmt.setObject(1, sID,Types.OTHER);
+            cstmt.setInt(2,lID);
+            cstmt.setString(3,tName);
+            cstmt.registerOutParameter(4, Types.SMALLINT);
+            cstmt.execute();
+
+            ReturnCode = cstmt.getShort(4);
+
+            switch (ReturnCode) {
+                case 500:
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+                    json = new Gson().toJson(ReturnCode);
+                    break;
+                case 401:
+                    status = HttpStatus.UNAUTHORIZED;
+
+                    json = new Gson().toJson(ReturnCode);
+                    break;
+                case 200:
+                    status = HttpStatus.OK;
+
+                    json = new Gson().toJson(ReturnCode);
+                    break;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).header(ConType, ConValue).body(json);
+    }
 }
