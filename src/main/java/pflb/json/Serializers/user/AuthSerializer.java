@@ -1,11 +1,11 @@
-package pflb.json.Serializers;
+package pflb.json.Serializers.user;
 
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import pflb.entity.User;
+import pflb.entity.user.User;
 
 import java.lang.reflect.Type;
 
