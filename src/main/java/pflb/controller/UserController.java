@@ -26,13 +26,14 @@ public class UserController extends CustomGsonBuilder {
     private String ConType = "Content-Type";
     private String ConValue = "application/json; charset=UTF-8";
 
+    private String UserID;
     private String Name;
     private String LastName;
     private String MiddleName;
     private int Role;
     private String SessionID;
-    private int CourseID;
-    private String ImgURL;
+    private boolean CoWorker;
+    private String CourseID;
 
     private String CourseName;
     private String CourseStartDate;
@@ -134,26 +135,30 @@ public class UserController extends CustomGsonBuilder {
 
         ReqMessage = "";
         ReturnCode = 0;
-        sql = "{call get_info(?,?,?,?,?,?,?)}";
+        sql = "{call get_info(?,?,?,?,?,?,?,?,?)}";
 
         try (Connection con = getConnection();
              CallableStatement cstmt = con.prepareCall(sql)) {
 
             cstmt.setObject(1, sessionID,Types.OTHER);
-            cstmt.registerOutParameter(2, java.sql.Types.VARCHAR);
-            cstmt.registerOutParameter(3, java.sql.Types.VARCHAR);
-            cstmt.registerOutParameter(4, java.sql.Types.VARCHAR);
-            cstmt.registerOutParameter(5, Types.SMALLINT);
-            cstmt.registerOutParameter(6, Types.VARCHAR);
-            cstmt.registerOutParameter(7, Types.SMALLINT);
+            cstmt.registerOutParameter(2, Types.OTHER); //UserID
+            cstmt.registerOutParameter(3, java.sql.Types.VARCHAR); //LastName
+            cstmt.registerOutParameter(4, java.sql.Types.VARCHAR); //Name
+            cstmt.registerOutParameter(5, java.sql.Types.VARCHAR); //MiddleName
+            cstmt.registerOutParameter(6, Types.SMALLINT); //Role
+            cstmt.registerOutParameter(7, Types.BOOLEAN); // CoWorker
+            cstmt.registerOutParameter(8, Types.OTHER); // CourseID*/
+            cstmt.registerOutParameter(9, Types.SMALLINT); // ReturnCode
             cstmt.execute();
 
-            Name = cstmt.getString(3);
-            LastName = cstmt.getString(2);
-            MiddleName = cstmt.getString(4);
-            ImgURL = cstmt.getString(6);
-            Role = cstmt.getShort(5);
-            ReturnCode = cstmt.getShort(7);
+            UserID = cstmt.getObject(2).toString();
+            LastName = cstmt.getString(3);
+            Name = cstmt.getString(4);
+            MiddleName = cstmt.getString(5);
+            Role = cstmt.getShort(6);
+            CoWorker = cstmt.getBoolean(7);
+            CourseID = cstmt.getObject(8).toString();
+            ReturnCode = cstmt.getShort(9);
 
             switch (ReturnCode) {
                 case 500:
@@ -190,11 +195,16 @@ public class UserController extends CustomGsonBuilder {
                     status = HttpStatus.OK;
                     ReqMessage = "OK";
 
-                    user.setName(Name);
+                    user.setUserID(UserID);
+                    user.setCurseID(CourseID);
                     user.setLastName(LastName);
+                    user.setLogin("login!!");
                     user.setMiddleName(MiddleName);
+                    user.setName(Name);
+                    user.setCoworker(CoWorker);
+                    user.setImgURL("!!");
                     user.setRole(Role);
-                    user.setImgURL(ImgURL);
+
                     user.setReqMessage(ReqMessage);
                     user.setReturnCode(ReturnCode);
 
@@ -228,7 +238,7 @@ public class UserController extends CustomGsonBuilder {
             cstmt.registerOutParameter(6, Types.SMALLINT);
             cstmt.execute();
 
-            CourseID = cstmt.getShort(2);
+            //CourseID = cstmt.getShort(2);
             CourseName = cstmt.getString(3);
 
             if (null == cstmt.getObject(4)) {
@@ -265,7 +275,7 @@ public class UserController extends CustomGsonBuilder {
                     status = HttpStatus.OK;
                     ReqMessage = "OK";
 
-                    course.setID(CourseID);
+                    //course.setID(CourseID);
                     course.setName(CourseName);
                     course.setStartDate(CourseStartDate);
                     course.setEndDate(CourseEndDate);
@@ -338,7 +348,7 @@ public class UserController extends CustomGsonBuilder {
                     status = HttpStatus.OK;
                     ReqMessage = "OK";
 
-                    lesson.setID(CourseID);
+                    //lesson.setID(CourseID);
                     lesson.setName(CourseName);
                     lesson.setLessonTask(LessonTask);
                     lesson.setHomeTask(HomeTask);

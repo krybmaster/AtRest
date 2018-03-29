@@ -4,13 +4,15 @@ public class User {
 
     private String Login;
     private String PassMD5;
+    private String UserId;
     private String Name;
     private String LastName;
     private String MiddleName;
     private int Role;
     private String SessionID;
     private String ImgURL;
-    private int CurseID;
+    private String CurseID;
+    private boolean Coworker;
 
     private int ReturnCode;
     private String ReqMessage;
@@ -18,18 +20,12 @@ public class User {
     public User() {
     }
 
-    public User(String login, String passMD5, String name, String lastName, String middleName, int role, String sessionID, String imgURL, int curseID, int returnCode, String reqMessage) {
-        Login = login;
-        PassMD5 = passMD5;
-        Name = name;
-        LastName = lastName;
-        MiddleName = middleName;
-        Role = role;
-        SessionID = sessionID;
-        ImgURL = imgURL;
-        CurseID = curseID;
-        ReturnCode = returnCode;
-        ReqMessage = reqMessage;
+    public String getUserID() {
+        return UserId;
+    }
+
+    public void setUserID(String userID) {
+        UserId = userID;
     }
 
     public String getLogin() {
@@ -96,11 +92,19 @@ public class User {
         ImgURL = imgURL;
     }
 
-    public int getCurseID() {
+    public void setCoworker(boolean coworker) {
+        this.Coworker = coworker;
+    }
+
+    public boolean getCoworker() {
+        return Coworker;
+    }
+
+    public String getCurseID() {
         return CurseID;
     }
 
-    public void setCurseID(int curseID) {
+    public void setCurseID(String curseID) {
         CurseID = curseID;
     }
 

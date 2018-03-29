@@ -14,13 +14,15 @@ public class InfoSerializer implements JsonSerializer<User>{
 
         JsonObject result = new JsonObject();
 
+        result.addProperty("user_id", src.getUserID());
         result.addProperty("name", src.getName());
         result.addProperty("last_name", src.getLastName());
         result.addProperty("middle_name", src.getMiddleName());
         result.addProperty("role", src.getRole());
-        result.addProperty("img_url", src.getImgURL());
         result.addProperty("message", src.getReqMessage());
         result.addProperty("code", src.getReturnCode());
+        result.addProperty("co_worker", src.getCoworker());
+        result.addProperty("course_id", src.getCurseID());
 
         return result;
     }
