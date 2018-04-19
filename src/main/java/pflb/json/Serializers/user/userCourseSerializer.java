@@ -18,6 +18,7 @@ public class userCourseSerializer implements JsonSerializer<Course> {
         result.addProperty("name", src.getName());
         result.addProperty("start_date", src.getStartDate());
         result.addProperty("end_date", src.getEndDate());
+        result.addProperty("curr_cource_lesson", src.getCurrCourceLesson());
         result.addProperty("message", src.getReqMessage());
         result.addProperty("code", src.getReturnCode());
 

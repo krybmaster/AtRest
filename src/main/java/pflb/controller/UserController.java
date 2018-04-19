@@ -33,11 +33,12 @@ public class UserController extends CustomGsonBuilder {
     private int Role;
     private String SessionID;
     private boolean CoWorker;
-    private String CourseID;
 
+    private String CourseID;
     private String CourseName;
     private String CourseStartDate;
     private String CourseEndDate;
+    private int CourseCurrLesson;
 
     private int ReturnCode;
     private String ReqMessage;
@@ -219,36 +220,32 @@ public class UserController extends CustomGsonBuilder {
         return ResponseEntity.status(status).header(ConType, ConValue).body(json);
     }
 
-    @RequestMapping(value = "/course/session/{sessionID}", method = RequestMethod.GET)
+    @RequestMapping(value = "/courses/session/{sessionID}", method = RequestMethod.GET)
     @CrossOrigin
-    public ResponseEntity getCourse(@PathVariable UUID sessionID) throws JsonParseException {
+    public ResponseEntity getCourses(@PathVariable UUID sessionID) throws JsonParseException {
 
         ReqMessage = "";
         ReturnCode = 0;
-        sql = "{call get_course(?,?,?,?,?,?)}";
+        sql = "{call get_courses(?,?,?,?,?,?,?)}";
 
         try (Connection con = getConnection();
              CallableStatement cstmt = con.prepareCall(sql)) {
 
             cstmt.setObject(1, sessionID,Types.OTHER);
-            cstmt.registerOutParameter(2, Types.SMALLINT);
+            cstmt.registerOutParameter(2, Types.OTHER);
             cstmt.registerOutParameter(3, java.sql.Types.VARCHAR);
-            cstmt.registerOutParameter(4, Types.OTHER);
-            cstmt.registerOutParameter(5, Types.OTHER);
+            cstmt.registerOutParameter(4, Types.TIMESTAMP);
+            cstmt.registerOutParameter(5, Types.TIMESTAMP);
             cstmt.registerOutParameter(6, Types.SMALLINT);
+            cstmt.registerOutParameter(7, Types.SMALLINT);
             cstmt.execute();
 
-            //CourseID = cstmt.getShort(2);
+            CourseID = cstmt.getObject(2).toString();
             CourseName = cstmt.getString(3);
-
-            if (null == cstmt.getObject(4)) {
-                CourseStartDate = "";
-            } else CourseStartDate = cstmt.getObject(4).toString();
-            if (null == cstmt.getObject(5)) {
-                CourseEndDate = "";
-            } else CourseEndDate = cstmt.getObject(5).toString();
-
-            ReturnCode = cstmt.getShort(6);
+            CourseStartDate = cstmt.getObject(4).toString();
+            CourseEndDate = cstmt.getObject(5).toString();
+            CourseCurrLesson = cstmt.getShort(6);
+            ReturnCode = cstmt.getShort(7);
 
             switch (ReturnCode) {
                 case 500:
@@ -275,11 +272,12 @@ public class UserController extends CustomGsonBuilder {
                     status = HttpStatus.OK;
                     ReqMessage = "OK";
 
-                    //course.setID(CourseID);
+                    course.setID(CourseID);
                     course.setName(CourseName);
                     course.setStartDate(CourseStartDate);
                     course.setEndDate(CourseEndDate);
                     course.setReqMessage(ReqMessage);
+                    course.setCurrCourceLesson(CourseCurrLesson);
                     course.setReturnCode(ReturnCode);
 
                     json = userCourseReqJson().toJson(course);

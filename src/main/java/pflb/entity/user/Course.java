@@ -2,10 +2,11 @@ package pflb.entity.user;
 
 public class Course {
 
-    private int     ID;
+    private String  ID;
     private String  Name;
     private String  StartDate;
     private String  EndDate;
+    private int CurrCourceLesson;
 
     private int ReturnCode;
     private String ReqMessage;
@@ -13,20 +14,11 @@ public class Course {
     public Course() {
     }
 
-    public Course(int ID, String name, String startDate, String endDate, int returnCode, String reqMessage) {
-        this.ID = ID;
-        Name = name;
-        StartDate = startDate;
-        EndDate = endDate;
-        ReturnCode = returnCode;
-        ReqMessage = reqMessage;
-    }
-
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
@@ -48,6 +40,14 @@ public class Course {
 
     public String getEndDate() {
         return EndDate;
+    }
+
+    public int getCurrCourceLesson() {
+        return CurrCourceLesson;
+    }
+
+    public void setCurrCourceLesson(int currCourceLesson) {
+        CurrCourceLesson = currCourceLesson;
     }
 
     public void setEndDate(String endDate) {
