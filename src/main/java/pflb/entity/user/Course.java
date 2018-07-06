@@ -1,5 +1,7 @@
 package pflb.entity.user;
 
+import java.util.ArrayList;
+
 public class Course {
 
     private String  ID;

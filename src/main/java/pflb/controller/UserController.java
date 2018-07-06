@@ -244,8 +244,8 @@ public class UserController extends CustomGsonBuilder {
             CourseName = cstmt.getString(3);
             CourseStartDate = cstmt.getObject(4).toString();
             CourseEndDate = cstmt.getObject(5).toString();
-            CourseCurrLesson = cstmt.getShort(6);
-            ReturnCode = cstmt.getShort(7);
+            CourseCurrLesson = cstmt.getInt(6);
+            ReturnCode = cstmt.getInt(7);
 
             switch (ReturnCode) {
                 case 500:
